@@ -97,7 +97,7 @@ public class StudentProcessor {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                latch.countDown(); // Decrease latch count
+                latch.countDown(); 
             }
         }
     }
