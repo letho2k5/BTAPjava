@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<students>
+    <student>
+        <id>1</id>
+        <name>Le Quang Tho</name>
+        <address>Quang Binh</address>
+        <ageYears>18</ageYears>
+        <ageMonths>10</ageMonths>
+        <ageDays>22</ageDays>
+        <encodedAge>29</encodedAge>
+        <sum>21</sum>
+        <isPrime>false</isPrime>
+    </student>
+</students>

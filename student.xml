@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<students>
+    <student>
+        <id>1</id>
+        <name>Le Quang Tho</name>
+        <address>Quang Binh</address>
+        <dateOfBirth>2005-07-25</dateOfBirth>
+    </student>
+</students>
