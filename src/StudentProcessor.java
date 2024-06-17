@@ -29,9 +29,9 @@ public class StudentProcessor {
         int ageYears;
         int ageMonths;
         int ageDays;
-        String encodedAge; // Corrected variable name
-        boolean isPrime; // Whether the sum of digits is a prime number
-        int sum; // Sum of digits in date of birth
+        String encodedAge; 
+        boolean isPrime; 
+        int sum; 
 
         Student(String id, String name, String address, String dateOfBirth) {
             this.id = id;
@@ -46,28 +46,24 @@ public class StudentProcessor {
     static BlockingQueue<Student> processedQueue = new LinkedBlockingQueue<>();
 
     public static void main(String[] args) throws Exception {
-        // Delete output file before starting
+    
         new File("kq.xml").delete();
 
-        // Create threads and latch for synchronization
+       
         ExecutorService executor = Executors.newFixedThreadPool(3);
         CountDownLatch latch = new CountDownLatch(3);
 
         executor.execute(new Thread1(latch));
         executor.execute(new Thread2(latch));
         executor.execute(new Thread3(latch));
-
-        // Shutdown executor after completion
+        
         executor.shutdown();
         executor.awaitTermination(1, TimeUnit.HOURS);
 
-        // Wait for all threads to finish
         latch.await();
 
-        // Write results to XML file
         writeResultsToXml();
 
-        // Read and decode results from kq.xml
         readAndDecodeResults();
     }
 
@@ -97,7 +93,6 @@ public class StudentProcessor {
                     Student student = new Student(id, name, address, dateOfBirth);
                     queue1.put(student);
                 }
-                // Signal end of data
                 queue1.put(new Student("END", "", "", ""));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -120,7 +115,7 @@ public class StudentProcessor {
                 while (true) {
                     Student student = queue1.take();
                     if (student.id.equals("END")) {
-                        queue2.put(student); // Signal end to next thread
+                        queue2.put(student); 
                         break;
                     }
                     if (student.dateOfBirth != null && !student.dateOfBirth.isEmpty()) {
@@ -129,16 +124,14 @@ public class StudentProcessor {
                         int birthMonth = Integer.parseInt(parts[1]);
                         int birthDay = Integer.parseInt(parts[2]);
 
-                        // Calculate age in years, months, and days
+                     
                         int[] ageComponents = calculateAge(birthYear, birthMonth, birthDay);
                         student.ageYears = ageComponents[0];
                         student.ageMonths = ageComponents[1];
                         student.ageDays = ageComponents[2];
 
-                        // Calculate sum of digits in date of birth
                         student.sum = calculateDigitSum(student.dateOfBirth);
 
-                        // Encode sum of age components
                         student.encodedAge = encodeAge(student.ageYears);
 
                         queue2.put(student);
@@ -152,24 +145,22 @@ public class StudentProcessor {
         }
 
         private int[] calculateAge(int birthYear, int birthMonth, int birthDay) {
-            // Current date assumption for calculating age
             int currentYear = 2024;
-            int currentMonth = 6; // June
+            int currentMonth = 6; 
             int currentDay = 17;
 
-            // Calculating age
             int ageYears = currentYear - birthYear;
             int ageMonths = currentMonth - birthMonth;
             int ageDays = currentDay - birthDay;
 
-            // Adjusting negative months or days
+        
             if (ageDays < 0) {
                 ageMonths--;
-                ageDays += 30; // Assuming 30 days in a month
+                ageDays += 30;
             }
             if (ageMonths < 0) {
                 ageYears--;
-                ageMonths += 12; // 12 months in a year
+                ageMonths += 12; 
             }
 
             return new int[] { ageYears, ageMonths, ageDays };
@@ -186,10 +177,10 @@ public class StudentProcessor {
         }
 
         private String encodeAge(int years) {
-            // Sum of age components and sum of digits
+
             int sum = years;
 
-            // Encoding sum
+
             StringBuilder encoded = new StringBuilder();
             String sumStr = String.valueOf(sum);
             for (int i = 0; i < sumStr.length(); i++) {
@@ -212,14 +203,13 @@ public class StudentProcessor {
                 while (true) {
                     Student student = queue2.take();
                     if (student.id.equals("END")) {
-                        processedQueue.put(student); // Signal end to processed queue
+                        processedQueue.put(student); 
                         break;
                     }
-
-                    // Check if the encoded sum is a prime number
+                    
                     student.isPrime = isPrime(student.sum);
 
-                    processedQueue.put(student); // Put processed student into queue
+                    processedQueue.put(student); 
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -351,7 +341,7 @@ public class StudentProcessor {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            writeEmptyResult(); // Write empty result to file if there's an error
+            writeEmptyResult();
         }
     }
 
